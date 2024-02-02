@@ -1,0 +1,37 @@
+# Download and unzip the file
+download.file("http://www.ssa.gov/oact/babynames/state/namesbystate.zip", "namesbystate.zip")
+unzip("namesbystate.zip", exdir = "state_files")
+
+# Get the list of state files
+stateFiles <- grep("\\.TXT", list.files("state_files"), value = TRUE)
+
+# Initialize an empty data frame
+allStates <- data.frame()
+
+# Read and combine data from each state file
+for (i in stateFiles) {
+  stateData <- read.table(file.path("state_files", i), sep = ",", header = FALSE)
+  allStates <- rbind(allStates, stateData)
+}
+
+# Assign column names to the data frame
+colnames(allStates) <- c("state", "sex", "year", "name", "n")
+
+# Write the combined data to a CSV file
+write.csv(allStates, "all-states-babynames.csv", row.names = FALSE)
+
+# Load the dplyr package
+library(dplyr)
+
+# Convert the 'n' column to numeric
+allStates$n <- as.numeric(allStates$n)
+
+# Group the data by state, year, and sex, and then find the top 3 names for each group
+  top3Names <- allStates %>%
+   group_by(state, year, sex) %>%
+   mutate(rank = row_number(desc(n))) %>%
+   filter(rank <= 3) %>%
+   ungroup()
+
+# Write the result to a new CSV file
+write.csv(top3Names, "top3-names-by-state-year-sex.csv", row.names = FALSE) 
