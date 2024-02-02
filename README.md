@@ -1,6 +1,4 @@
-# babynames
-
-# Tableau Dashboard Data Preparation with R
+# Tableau Dashboard of Baby Name Data Preparation with R
 
 This R script facilitates the data preparation for a Tableau dashboard exploring American births and baby names from 1910 to 2022. It downloads, unzips, and combines state-wise baby names datasets, creating two CSV files: 'all-states-babynames.csv' containing comprehensive data, and 'top3-names-by-state-year-sex.csv' with the top 3 names for each state, year, and sex.
 
